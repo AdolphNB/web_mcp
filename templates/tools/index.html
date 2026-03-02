@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}工具列表 - mcptools.xin{% endblock %}
+{% block description %}探索我们精心打造的MCP工具集合，包含多种开发者和在线工具{% endblock %}
+{% block keywords %}工具列表,MCP工具,开发者工具,在线工具,API工具{% endblock %}
+{% block og_url %}/tools{% endblock %}
+{% block og_title %}工具列表 - mcptools.xin{% endblock %}
+{% block og_description %}探索我们精心打造的MCP工具集合{% endblock %}
+{% block canonical_url %}/tools{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    <nav class="flex" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li class="inline-flex items-center">
+                <a href="/" class="text-gray-600 hover:text-gray-900">首页</a>
+            </li>
+            <li>
+                <div class="flex items-center">
+                    <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                    <span class="ml-1 text-gray-900">工具列表</span>
+                </div>
+            </li>
+        </ol>
+    </nav>
+</div>
+
+<div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">工具列表</h1>
+    <p class="mt-2 text-gray-600">探索我们精心打造的工具集合</p>
+</div>
+
+{% if tools %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for tool in tools %}
+    <div class="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow duration-200">
+        <a href="/tools/{{ tool.slug }}" class="block">
+            <div class="p-6">
+                <div class="flex items-center space-x-4 mb-4">
+                    {% if tool.icon_url %}
+                    <img src="{{ tool.icon_url }}" alt="{{ tool.name }}" class="w-16 h-16 rounded-lg">
+                    {% else %}
+                    <div class="w-16 h-16 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
+                        <span class="text-2xl">🛠️</span>
+                    </div>
+                    {% endif %}
+                    <h2 class="text-xl font-semibold text-gray-900">{{ tool.name }}</h2>
+                </div>
+                
+                {% if tool.short_description %}
+                <p class="text-gray-600 mb-4 line-clamp-2">{{ tool.short_description }}</p>
+                {% else %}
+                <p class="text-gray-600 mb-4 line-clamp-2">{{ tool.description or "暂无描述" }}</p>
+                {% endif %}
+                
+                <div class="flex items-center justify-between">
+                    {% if tool.category %}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        {{ tool.category }}
+                    </span>
+                    {% else %}
+                    <span></span>
+                    {% endif %}
+                    <span class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                        查看详情 →
+                    </span>
+                </div>
+                
+                {% if tool.tags %}
+                <div class="mt-4 flex flex-wrap gap-1">
+                    {% for tag in tool.tags[:3] %}
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-700">
+                        {{ tag }}
+                    </span>
+                    {% endfor %}
+                    {% if tool.tags|length > 3 %}
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-500">
+                        +{{ tool.tags|length - 3 }}
+                    </span>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="bg-white rounded-lg shadow-sm border p-12 text-center">
+    <div class="mx-auto w-24 h-24 mb-6 bg-gray-100 rounded-full flex items-center justify-center">
+        <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
+    </div>
+    <h3 class="text-lg font-medium text-gray-900 mb-2">暂无工具</h3>
+    <p class="text-gray-500">目前还没有工具，敬请期待！</p>
+</div>
+{% endif %}
+{% endblock %}

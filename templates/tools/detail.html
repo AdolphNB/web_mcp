@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}{{ tool.name }} - mcptools.xin{% endblock %}
+{% block description %}{{ tool.short_description or tool.description or tool.name }}{% endblock %}
+{% block keywords %}{{ tool.name }}{% if tool.category %},{{ tool.category }}{% endif %}{% if tool.tags %},{{ tool.tags|join(',') }}{% endif %},MCP工具{% endblock %}
+{% block og_url %}/tools/{{ tool.slug }}{% endblock %}
+{% block og_title %}{{ tool.name }} - mcptools.xin{% endblock %}
+{% block og_description %}{{ tool.short_description or tool.description }}{% endblock %}
+{% block canonical_url %}/tools/{{ tool.slug }}{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    <nav class="flex" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li class="inline-flex items-center">
+                <a href="/" class="text-gray-600 hover:text-gray-900">首页</a>
+            </li>
+            <li>
+                <div class="flex items-center">
+                    <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                    <a href="/tools" class="ml-1 text-gray-600 hover:text-gray-900">工具列表</a>
+                </div>
+            </li>
+            <li>
+                <div class="flex items-center">
+                    <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                    <span class="ml-1 text-gray-500">{{ tool.name }}</span>
+                </div>
+            </li>
+        </ol>
+    </nav>
+</div>
+
+<div class="bg-white rounded-lg shadow-sm border">
+    <div class="p-8">
+        <div class="flex items-start space-x-6">
+            {% if tool.icon_url %}
+            <img src="{{ tool.icon_url }}" alt="{{ tool.name }}" class="w-24 h-24 rounded-xl">
+            {% else %}
+            <div class="w-24 h-24 rounded-xl bg-blue-100 flex items-center justify-center">
+                <span class="text-4xl">🛠️</span>
+            </div>
+            {% endif %}
+            
+            <div class="flex-1">
+                <h1 class="text-3xl font-bold text-gray-900">{{ tool.name }}</h1>
+                
+                {% if tool.category %}
+                <span class="mt-2 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                    {{ tool.category }}
+                </span>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="mt-8">
+            <h2 class="text-lg font-semibold text-gray-900">描述</h2>
+            <p class="mt-2 text-gray-600 whitespace-pre-line">{{ tool.description or "暂无描述" }}</p>
+        </div>
+        
+        {% if tool.tags %}
+        <div class="mt-8">
+            <h2 class="text-lg font-semibold text-gray-900">标签</h2>
+            <div class="mt-2 flex flex-wrap gap-2">
+                {% for tag in tool.tags %}
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700">
+                    {{ tag }}
+                </span>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        {% if tool.api_endpoint %}
+        <div class="mt-8 p-4 bg-gray-50 rounded-lg">
+            <h2 class="text-lg font-semibold text-gray-900">API 端点</h2>
+            <code class="mt-2 block text-sm text-blue-600 font-mono">{{ tool.api_endpoint }}</code>
+        </div>
+        {% endif %}
+        
+        <div class="mt-8 pt-6 border-t">
+            <a href="/tools" class="inline-flex items-center text-blue-600 hover:text-blue-800">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                返回工具列表
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}404 - 页面未找到 - mcptools.xin{% endblock %}
+
+{% block content %}
+<div class="flex flex-col items-center justify-center py-20">
+    <div class="text-9xl font-bold text-gray-200 mb-4">404</div>
+    <h1 class="text-3xl font-bold text-gray-900 mb-4">页面未找到</h1>
+    <p class="text-gray-600 mb-8 text-center max-w-md">
+        抱歉，您访问的页面不存在或已被移除。
+    </p>
+    <div class="flex space-x-4">
+        <a href="/" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+            返回首页
+        </a>
+        <a href="/tools" class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+            查看工具列表
+        </a>
+    </div>
+</div>
+{% endblock %}
