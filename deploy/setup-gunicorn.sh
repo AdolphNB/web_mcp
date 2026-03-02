@@ -1,15 +1,21 @@
 #!/bin/bash
 
 # Gunicorn and Supervisor setup script for mcptools.xin
+# Uses UV for environment management
 
 set -e
 
 PROJECT_NAME="mcptools"
+DEPLOY_USER="www-data"
 PROJECT_DIR="/var/www/mcptools"
 VENV_DIR="${PROJECT_DIR}/.venv"
 SUPERVISOR_CONF="/etc/supervisor/conf.d/${PROJECT_NAME}.conf"
 LOG_DIR="/var/log/mcptools"
 PID_DIR="/var/run/mcptools"
+
+# UV installation path (using pip-installed UV to avoid snap issues)
+UV_PATH="/opt/uv/bin/uv"
+
 
 # Colors
 RED='\033[0;31m'
@@ -29,34 +35,44 @@ echo_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
-# Check if running as root
-if [ "$EUID" -ne 0 ]; then
-    echo_error "Please run as root or with sudo"
-    exit 1
-fi
-
 echo_info "Setting up Gunicorn and Supervisor for ${PROJECT_NAME}..."
 
 # Create necessary directories
 echo_info "Creating directories..."
 mkdir -p "$LOG_DIR" "$PID_DIR"
-chown -R www-data:www-data "$LOG_DIR" "$PID_DIR"
+chown -R www-data:www-data "$LOG_DIR" "$PID_DIR" "/var/www/.cache"
 
 # Install required packages
 echo_info "Installing required packages..."
 apt-get update
 apt-get install -y supervisor
 
-# Setup virtual environment if not exists
+# Setup virtual environment verification
+echo_info "Verifying virtual environment..."
 if [ ! -d "$VENV_DIR" ]; then
-    echo_info "Creating virtual environment..."
-    python3 -m venv "$VENV_DIR"
+    echo_error "Virtual environment not found at $VENV_DIR"
+    echo_error "Please run deploy.sh first to create the virtual environment"
+    exit 1
 fi
 
-# Install dependencies
-echo_info "Installing Python dependencies..."
-$VENV_DIR/bin/pip install --upgrade pip
-$VENV_DIR/bin/pip install -r "$PROJECT_DIR/requirements.txt"
+# Verify permissions
+echo_info "Verifying virtual environment permissions..."
+chown -R $DEPLOY_USER:$DEPLOY_USER "$VENV_DIR"
+chmod -R 755 "$VENV_DIR"
+
+# Verify UV and Python in venv
+if ! sudo -u $DEPLOY_USER "$VENV_DIR/bin/python" --version &> /dev/null; then
+    echo_error "Python in venv is not executable by $DEPLOY_USER"
+    exit 1
+fi
+
+# Verify gunicorn is installed
+if [ ! -f "$VENV_DIR/bin/gunicorn" ]; then
+    echo_info "Installing gunicorn..."
+    sudo -u $DEPLOY_USER "$UV_PATH" pip install gunicorn uvicorn[standard]
+fi
+
+echo_info "Virtual environment is ready"
 
 # Copy Supervisor configuration
 echo_info "Copying Supervisor configuration..."
