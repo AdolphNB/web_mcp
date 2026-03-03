@@ -29,6 +29,7 @@ templates = Jinja2Templates(directory="templates")
 # Mount static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
 app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/res", StaticFiles(directory="res"), name="res")
 
 # Add API logging middleware
 app.middleware("http")(log_api_call)
