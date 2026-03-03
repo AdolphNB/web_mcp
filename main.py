@@ -37,9 +37,10 @@ app.include_router(tools.router, prefix="/api")
 app.include_router(seo.router)
 
 
-@app.get("/")
-async def read_root():
-    return {"message": "mcptools.xin API"}
+@app.get("/", response_class=HTMLResponse)
+async def read_root(request: Request):
+    """公司首页"""
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 @app.get("/tools", response_class=HTMLResponse)
