@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Nginx deployment helper script for mcptools.xin
+# Nginx deployment helper script for singularitynear.com
 
 set -e
 
@@ -70,4 +70,4 @@ echo "     systemctl start mcptools"
 echo ""
 echo "  2. To setup SSL (HTTPS), use certbot:"
 echo "     sudo apt install certbot python3-certbot-nginx"
-echo "     sudo certbot --nginx -d mcptools.xin"
+echo "     sudo certbot --nginx -d singularitynear.com"

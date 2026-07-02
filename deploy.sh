@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Complete deployment script for mcptools.xin
+# Complete deployment script for singularitynear.com
 # This script handles the entire deployment process using UV
 
 set -e

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Gunicorn and Supervisor setup script for mcptools.xin
+# Gunicorn and Supervisor setup script for singularitynear.com
 # Uses UV for environment management
 
 set -e

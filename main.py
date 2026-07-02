@@ -8,7 +8,7 @@ from app.routers import seo
 from app.middleware import log_api_call
 
 app = FastAPI(
-    title="mcptools.xin API",
+    title="singularitynear.com API",
     description="基础 FastAPI 应用，包含 CORS 和简单错误处理",
     version="0.1.0",
 )

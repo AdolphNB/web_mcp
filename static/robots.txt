@@ -1,6 +1,6 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://mcptools.xin/sitemap.xml
+Sitemap: https://singularitynear.com/sitemap.xml
 
 Crawl-delay: 1

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Database migration script for mcptools.xin
+Database migration script for singularitynear.com
 Creates all database tables using SQLAlchemy
 """
 

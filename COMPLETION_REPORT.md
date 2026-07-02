@@ -1,7 +1,7 @@
-# mcptools.xin 项目完成报告
+# singularitynear.com 项目完成报告
 
 ## 项目概览
-为 mcptools.xin 域名搭建完整的 MCP 工具展示和公开 API 服务网站。
+为 singularitynear.com 域名搭建完整的 MCP 工具展示和公开 API 服务网站。
 
 ## 完成情况
 
@@ -196,7 +196,7 @@ sudo supervisorctl start mcptools
 ### SSL/HTTPS 配置
 ```bash
 sudo apt install certbot python3-certbot-nginx
-sudo certbot --nginx -d mcptools.xin
+sudo certbot --nginx -d singularitynear.com
 ```
 
 ## 服务管理
@@ -231,7 +231,7 @@ sudo supervisorctl restart mcptools
 
 ### 短期（1-2 周）
 1. [ ] 部署到 VPS 服务器
-2. [ ] 配置 DNS 解析 mcptools.xin
+2. [ ] 配置 DNS 解析 singularitynear.com
 3. [ ] 设置 SSL 证书（HTTPS）
 4. [ ] 配置自动备份
 
@@ -249,7 +249,7 @@ sudo supervisorctl restart mcptools
 
 ## 总结
 
-mcptools.xin 网站项目已全部完成，包括：
+singularitynear.com 网站项目已全部完成，包括：
 - ✅ 完整的后端 FastAPI 应用
 - ✅ 响应式前端页面
 - ✅ RESTful API 服务
@@ -259,7 +259,7 @@ mcptools.xin 网站项目已全部完成，包括：
 - ✅ 生产环境部署配置
 - ✅ 一键部署脚本
 
-项目可以立即部署到生产环境，通过 mcptools.xin 域名提供工具展示和公开 API 服务。
+项目可以立即部署到生产环境，通过 singularitynear.com 域名提供工具展示和公开 API 服务。
 
 ---
 

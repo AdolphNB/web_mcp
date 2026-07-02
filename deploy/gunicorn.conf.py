@@ -1,4 +1,4 @@
-# Gunicorn configuration for mcptools.xin
+# Gunicorn configuration for singularitynear.com
 
 # Server socket
 bind = "127.0.0.1:8000"

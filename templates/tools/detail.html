@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}{{ tool.name }} - mcptools.xin{% endblock %}
+{% block title %}{{ tool.name }} - singularitynear.com{% endblock %}
 {% block description %}{{ tool.short_description or tool.description or tool.name }}{% endblock %}
 {% block keywords %}{{ tool.name }}{% if tool.category %},{{ tool.category }}{% endif %}{% if tool.tags %},{{ tool.tags|join(',') }}{% endif %},MCP工具{% endblock %}
 {% block og_url %}/tools/{{ tool.slug }}{% endblock %}
-{% block og_title %}{{ tool.name }} - mcptools.xin{% endblock %}
+{% block og_title %}{{ tool.name }} - singularitynear.com{% endblock %}
 {% block og_description %}{{ tool.short_description or tool.description }}{% endblock %}
 {% block canonical_url %}/tools/{{ tool.slug }}{% endblock %}
 

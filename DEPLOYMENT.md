@@ -1,4 +1,4 @@
-# mcptools.xin 部署指南
+# singularitynear.com 部署指南
 
 本部署脚本使用 **UV** 进行环境管理和依赖安装，同时解决权限问题，适用于生产环境。
 
@@ -250,7 +250,7 @@ python3 --version
 
 ```bash
 sudo apt install certbot python3-certbot-nginx
-sudo certbot --nginx -d mcptools.xin
+sudo certbot --nginx -d singularitynear.com
 ```
 
 ## 优势

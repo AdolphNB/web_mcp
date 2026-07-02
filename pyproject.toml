@@ -1,7 +1,7 @@
 [project]
 name = "mcptools-website"
 version = "0.1.0"
-description = "mcptools.xin - 工具展示网站和公开API服务"
+description = "singularitynear.com - 工具展示网站和公开API服务"
 authors = [{name = "Developer"}]
 dependencies = [
     "fastapi>=0.104.0",

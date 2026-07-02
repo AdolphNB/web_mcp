@@ -7,7 +7,7 @@ from datetime import datetime
 
 router = APIRouter()
 
-SITE_URL = "https://mcptools.xin"
+SITE_URL = "https://singularitynear.com"
 
 
 @router.get("/sitemap.xml", response_class=HTMLResponse)
