@@ -68,8 +68,8 @@ fi
 
 # Verify gunicorn is installed
 if [ ! -f "$VENV_DIR/bin/gunicorn" ]; then
-    echo_info "Installing gunicorn..."
-    sudo -u $DEPLOY_USER "$UV_PATH" pip install gunicorn uvicorn[standard]
+    echo_error "gunicorn not found in virtual environment. Please run deploy.sh first."
+    exit 1
 fi
 
 echo_info "Virtual environment is ready"

@@ -58,12 +58,6 @@ echo_step "Installing system dependencies..."
 apt-get update
 apt-get install -y python3 python3-pip nginx supervisor
 
-# Ensure uv is installed
-if ! command -v uv &> /dev/null; then
-    echo_warn "uv not found. Installing..."
-    curl -LsSf https://astral.sh/uv/install.sh | sh
-fi
-
 # Step 2: Create project directory and set permissions
 echo_step "Setting up project directory..."
 mkdir -p "$PROJECT_DIR"
@@ -74,12 +68,6 @@ mkdir -p "/var/www/.cache"
 # Set ownership before creating venv
 chown -R $DEPLOY_USER:$DEPLOY_USER "$PROJECT_DIR" "/var/log/${PROJECT_NAME}" "/var/run/${PROJECT_NAME}" "/var/www/.cache"
 chmod 750 "$PROJECT_DIR"
-echo_step "Setting up project directory..."
-mkdir -p "$PROJECT_DIR"
-mkdir -p "/var/log/${PROJECT_NAME}"
-mkdir -p "/var/run/${PROJECT_NAME}"
-mkdir -p "/var/www/.cache"
-chown -R $DEPLOY_USER:$DEPLOY_USER "/var/log/${PROJECT_NAME}" "/var/run/${PROJECT_NAME}" "/var/www/.cache"
 
 # Step 3: Copy application files
 echo_step "Copying application files..."
@@ -118,6 +106,7 @@ fi
 # Ensure project directory ownership after rsync
 echo_info "Ensuring correct ownership..."
 chown -R $DEPLOY_USER:$DEPLOY_USER "$PROJECT_DIR"
+chmod 750 "$PROJECT_DIR"
 
 # Step 4: Create virtual environment with UV
 # IMPORTANT: Use system Python to avoid symlink permission issues
@@ -147,29 +136,42 @@ fi
 echo_step "Installing dependencies with UV..."
 sudo -u $DEPLOY_USER "$UV_PATH" sync --no-dev
 
-# Ensure gunicorn is installed (needed for production)
-echo_info "Ensuring gunicorn is installed..."
-sudo -u $DEPLOY_USER "$UV_PATH" pip install gunicorn
-
 echo_info "All dependencies installed successfully"
 
 # Step 6: Setup environment variables
 echo_step "Setting up environment..."
 if [ ! -f ".env" ]; then
-    echo_warn ".env file not found. Creating from .env.example..."
-    cp .env.example .env
+    if [ -f ".env.example" ]; then
+        echo_warn ".env file not found. Creating from .env.example..."
+        cp .env.example .env
+    else
+        echo_warn ".env file not found and no .env.example available. Creating default .env..."
+        cat > .env << 'EOF'
+# Database configuration
+# SQLite (default): sqlite:///./mcptools.db
+# PostgreSQL: postgresql://user:password@localhost:5432/mcptools
+DATABASE_URL=sqlite:///./mcptools.db
+
+# Debug mode (set to True for development)
+DEBUG=False
+EOF
+    fi
 fi
+
+# Load environment variables for migration
+set -a
+source .env
+set +a
 
 # Step 7: Database migration
 echo_step "Running database migrations..."
-# Using SQLite by default
-if [ "$DATABASE_URL" = "" ] || [ "$DATABASE_URL" = "sqlite:///./mcptools.db" ]; then
-    .venv/bin/python scripts/migrate.py migrate
-    .venv/bin/python scripts/migrate.py seed
+if [ "$DATABASE_URL" = "sqlite:///./mcptools.db" ] || [ -z "$DATABASE_URL" ]; then
+    echo_info "Using SQLite database..."
+    sudo -u $DEPLOY_USER .venv/bin/python scripts/migrate.py migrate
+    sudo -u $DEPLOY_USER .venv/bin/python scripts/migrate.py seed
 else
-    echo_warn "Using PostgreSQL. Please ensure database is configured:"
-    echo_warn "  DATABASE_URL=$DATABASE_URL"
-    .venv/bin/python scripts/migrate.py migrate
+    echo_info "Using remote database: ${DATABASE_URL%%@*}@***"
+    sudo -u $DEPLOY_USER .venv/bin/python scripts/migrate.py migrate
 fi
 
 # Step 8: Set permissions

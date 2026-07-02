@@ -8,6 +8,9 @@ PROJECT_NAME="mcptools"
 NGINX_CONF="/etc/nginx/sites-available/${PROJECT_NAME}"
 NGINX_LINK="/etc/nginx/sites-enabled/${PROJECT_NAME}"
 PROJECT_DIR="/var/www/mcptools"
+CERT_DIR="/etc/letsencrypt/live/singularitynear.com"
+CERT_PATH="${CERT_DIR}/fullchain.pem"
+KEY_PATH="${CERT_DIR}/privkey.pem"
 
 # Colors
 RED='\033[0;31m'
@@ -34,6 +37,24 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 echo_info "Installing Nginx configuration for ${PROJECT_NAME}..."
+
+# Ensure SSL certificates exist before Nginx loads the site
+if ! command -v openssl >/dev/null 2>&1; then
+    echo_warn "openssl is not installed. Installing it now..."
+    apt-get update >/dev/null 2>&1
+    apt-get install -y openssl >/dev/null 2>&1
+fi
+
+mkdir -p "$CERT_DIR"
+if [ ! -f "$CERT_PATH" ] || [ ! -f "$KEY_PATH" ]; then
+    echo_warn "SSL certificate not found. Generating a self-signed certificate for local deployment..."
+    openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+        -keyout "$KEY_PATH" \
+        -out "$CERT_PATH" \
+        -subj "/CN=singularitynear.com" >/dev/null 2>&1
+    chmod 600 "$KEY_PATH"
+    chmod 644 "$CERT_PATH"
+fi
 
 # Backup existing config if it exists
 if [ -f "$NGINX_CONF" ]; then
