@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}新闻动态 - 奇点临近{% endblock %}
+{% block canonical_url %}/news{% endblock %}
+{% block og_url %}/news{% endblock %}
+{% block content %}
+<header class="page-heading"><p class="eyebrow">NEWS & UPDATES</p><h1>新闻动态</h1><p>产品进展、技术分享与网站更新。</p></header>
+<form method="get" action="/news" class="tool-filters" role="search" aria-label="搜索新闻"><div class="search-field"><label for="news-query">搜索新闻</label><input id="news-query" type="search" name="q" value="{{ q }}" placeholder="输入标题或摘要关键词"></div><button class="primary-button" type="submit">搜索</button>{% if q %}<a href="/news" class="reset-link">清除搜索</a>{% endif %}</form>
+<p class="result-summary" role="status">共 {{ total }} 篇新闻{% if q %}匹配搜索{% endif %}</p>
+{% if articles %}<div class="info-grid">
+{% for article in articles %}<a class="news-card" href="/news/{{ article.slug }}"><time datetime="{{ article.published_at.isoformat() }}">{{ article.published_at.strftime('%Y-%m-%d') }}</time><h2>{{ article.title }}</h2><p>{{ article.summary }}</p><span>阅读全文 →</span></a>{% endfor %}
+</div>
+{% if page_count > 1 %}<nav class="pagination" aria-label="新闻分页">{% if page > 1 %}<a href="{{ request.url.include_query_params(page=page-1) }}">← 上一页</a>{% endif %}<span>第 {{ page }} / {{ page_count }} 页</span>{% if page < page_count %}<a href="{{ request.url.include_query_params(page=page+1) }}">下一页 →</a>{% endif %}</nav>{% endif %}
+{% else %}<div class="info-card news-empty"><h2>{{ '没有找到相关新闻' if q else '新闻正在准备中' }}</h2><p>{{ '试试其他关键词，或清除搜索查看全部新闻。' if q else '新的产品进展和技术分享将在这里发布。' }}</p><a href="{{ '/news' if q else '/tools' }}">{{ '查看全部新闻' if q else '先探索工具 →' }}</a></div>{% endif %}
+{% endblock %}

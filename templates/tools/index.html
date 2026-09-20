@@ -10,7 +10,7 @@
 
 {% block content %}
 <div class="mb-6">
-    <nav class="flex" aria-label="Breadcrumb">
+    <nav class="flex" aria-label="面包屑导航">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
             <li class="inline-flex items-center">
                 <a href="/" class="text-gray-600 hover:text-gray-900">首页</a>
@@ -30,15 +30,32 @@
     <p class="mt-2 text-gray-600">探索我们精心打造的工具集合</p>
 </div>
 
+<form method="get" action="/tools" class="tool-filters" role="search" aria-label="搜索工具">
+    <div class="search-field">
+        <label for="tool-query">搜索工具</label>
+        <input id="tool-query" type="search" name="q" value="{{ q }}" placeholder="输入工具名称或功能关键词">
+    </div>
+    <div>
+        <label for="tool-category">工具分类</label>
+        <select id="tool-category" name="category">
+            <option value="">全部分类</option>
+            {% if category and category not in categories %}<option selected value="{{ category }}">{{ category }}</option>{% endif %}
+            {% for item in categories %}<option value="{{ item }}" {% if item == category %}selected{% endif %}>{{ item }}</option>{% endfor %}
+        </select>
+    </div>
+    <button type="submit" class="primary-button">搜索</button>
+    {% if q or category %}<a class="reset-link" href="/tools">清除筛选</a>{% endif %}
+</form>
+<p class="result-summary" role="status">共 {{ total }} 个工具{% if q or category %}，找到 {{ tools|length }} 个结果{% endif %}</p>
 {% if tools %}
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     {% for tool in tools %}
     <div class="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow duration-200">
-        <a href="/tools/{{ tool.slug }}" class="block">
+        <a href="/tools/{{ tool.slug }}" class="tool-card-link block">
             <div class="p-6">
                 <div class="flex items-center space-x-4 mb-4">
                     {% if tool.icon_url %}
-                    <img src="{{ tool.icon_url }}" alt="{{ tool.name }}" class="w-16 h-16 rounded-lg">
+                    <img src="{{ tool.icon_url }}" alt="{{ tool.name }}" width="64" height="64" loading="lazy" class="w-16 h-16 rounded-lg object-contain flex-shrink-0">
                     {% else %}
                     <div class="w-16 h-16 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
                         <span class="text-2xl">🛠️</span>
@@ -90,8 +107,15 @@
     <div class="mx-auto w-24 h-24 mb-6 bg-gray-100 rounded-full flex items-center justify-center">
         <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
     </div>
-    <h3 class="text-lg font-medium text-gray-900 mb-2">暂无工具</h3>
-    <p class="text-gray-500">目前还没有工具，敬请期待！</p>
+    {% if q or category %}
+    <h2 class="text-lg font-medium text-gray-900 mb-2">没有找到匹配的工具</h2>
+    <p class="text-gray-500">试试更简短的关键词，或选择其他分类。</p>
+    <a href="/tools" class="primary-button empty-action">清除筛选，查看全部工具</a>
+    {% else %}
+    <h2 class="text-lg font-medium text-gray-900 mb-2">工具正在准备中</h2>
+    <p class="text-gray-500">您可以先阅读 API 文档，了解接口使用方式。</p>
+    <a href="/docs" class="primary-button empty-action">查看 API 文档</a>
+    {% endif %}
 </div>
 {% endif %}
 {% endblock %}

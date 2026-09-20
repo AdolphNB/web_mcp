@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}使用文档 - 奇点临近{% endblock %}
+{% block canonical_url %}/guide{% endblock %}
+{% block og_url %}/guide{% endblock %}
+{% block content %}
+<header class="page-heading"><p class="eyebrow">GET STARTED</p><h1>从这里开始使用</h1><p>查找工具、了解接口，再将它们接入您的工作流程。</p></header>
+<div class="info-grid">
+    <section class="info-card"><span class="step-number">01</span><h2>找到工具</h2><p>通过名称、功能关键词或分类筛选工具，进入详情页查看说明。</p><a href="/tools">打开工具目录 →</a></section>
+    <section class="info-card"><span class="step-number">02</span><h2>阅读接口文档</h2><p>交互式 API 文档提供参数、返回结构与试用入口。工具目录中的端点信息请结合实际接口文档使用。</p><a href="/docs">打开 API 文档 →</a></section>
+    <section class="info-card"><span class="step-number">03</span><h2>关注新内容</h2><p>在新闻动态中查看产品更新和技术分享，或通过邮件反馈使用中的问题。</p><a href="/news">查看新闻动态 →</a></section>
+</div>
+<section class="info-card section-space"><h2>读取工具列表</h2><p>这是公开的只读接口，不需要管理密钥：</p><pre class="code-block"><code>GET /api/tools?limit=10
+GET /api/categories</code></pre><p><a href="/api/tools?limit=10">查看列表返回结果</a> · <a href="/openapi.json">OpenAPI 定义</a></p></section>
+<section class="info-card section-space"><h2>常见问题</h2><details><summary>工具目录中的每个工具都能直接运行吗？</summary><p>目录提供工具信息。是否可以运行、调用地址与参数，以该工具说明和 API 文档为准。</p></details><details><summary>遇到接口问题怎么办？</summary><p>请将接口路径、错误信息和复现步骤发送至 <a href="mailto:304633698@qq.com">304633698@qq.com</a>，请勿附带密钥。</p></details><details><summary>如何通过 Agent 管理网站？</summary><p>站点所有者可配置管理接口，通过 MCP 桥接程序查询访问量和编辑新闻。此功能需要独立的管理凭据，详细部署步骤见项目中的 HERMES_SETUP.md。</p></details></section>
+{% endblock %}

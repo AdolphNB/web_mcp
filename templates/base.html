@@ -15,48 +15,48 @@
     <meta property="og:title" content="{% block og_title %}奇点临近 - 计算机技术研发{% endblock %}">
     <meta property="og:description" content="{% block og_description %}专注计算机技术研发与人工智能创新，提供高质量的MCP工具集合{% endblock %}">
     <meta property="og:url" content="https://singularitynear.com{% block og_url %}{% endblock %}">
-    <meta property="og:image" content="https://singularitynear.com/static/og-image.png">
+    <meta property="og:image" content="https://singularitynear.com/res/log.png">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{% block twitter_title %}奇点临近 - 计算机技术研发{% endblock %}">
     <meta name="twitter:description" content="{% block twitter_description %}专注计算机技术研发与人工智能创新，提供高质量的MCP工具集合{% endblock %}">
-    <meta name="twitter:image" content="https://singularitynear.com/static/og-image.png">
+    <meta name="twitter:image" content="https://singularitynear.com/res/log.png">
 
     <!-- Canonical URL -->
     <link rel="canonical" href="https://singularitynear.com{% block canonical_url %}{% endblock %}">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <link rel="icon" type="image/png" href="/res/log.png">
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-        body { font-family: 'Inter', sans-serif; }
+    <link rel="stylesheet" href="/static/tailwind.css">
+    <link rel="stylesheet" href="/static/site.css">
+    <script src="/static/site.js" defer></script>
         {% block extra_css %}{% endblock %}
 </head>
     <body class="bg-black min-h-screen">
-    <nav class="bg-black/80 backdrop-blur-md border-b border-cyan-500/30 fixed w-full top-0 z-50">
+    <a class="skip-link" href="#main-content">跳转到主要内容</a>
+    <nav aria-label="主导航" class="site-nav bg-black/80 backdrop-blur-md border-b border-cyan-500/30 fixed w-full top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
+            <div class="nav-inner flex justify-between h-16">
                 <div class="flex items-center space-x-3">
                     <a href="/" class="flex items-center space-x-3">
                         <img src="/res/log.png" alt="Logo" class="h-10 w-10 object-contain">
                         <span class="text-xl font-bold text-cyan-400 tracking-wider">奇点临近</span>
                     </a>
                 </div>
-                <div class="flex items-center space-x-8">
-                    <a href="/" class="text-cyan-300/80 hover:text-cyan-400 hover:drop-shadow-[0_0_8px_rgba(34,211,238,0.6)] transition-all duration-300 font-medium">首页</a>
-                    <a href="/tools" class="text-cyan-300/80 hover:text-cyan-400 hover:drop-shadow-[0_0_8px_rgba(34,211,238,0.6)] transition-all duration-300 font-medium">产品</a>
-                    <a href="/services" class="text-cyan-300/80 hover:text-cyan-400 hover:drop-shadow-[0_0_8px_rgba(34,211,238,0.6)] transition-all duration-300 font-medium">服务</a>
-                    <a href="/docs" class="text-cyan-300/80 hover:text-cyan-400 hover:drop-shadow-[0_0_8px_rgba(34,211,238,0.6)] transition-all duration-300 font-medium">文档</a>
-                    <a href="https://canvas.singularitynear.com" target="_blank" rel="noopener noreferrer" class="text-cyan-300/80 hover:text-cyan-400 hover:drop-shadow-[0_0_8px_rgba(34,211,238,0.6)] transition-all duration-300 font-medium">Canvas</a>
-                    <a href="/about" class="text-cyan-300/80 hover:text-cyan-400 hover:drop-shadow-[0_0_8px_rgba(34,211,238,0.6)] transition-all duration-300 font-medium">关于我们</a>
+                <button class="menu-toggle" type="button" aria-controls="primary-navigation" aria-expanded="false" hidden>菜单</button>
+                <div id="primary-navigation" class="nav-links flex items-center space-x-8">
+                    {% for url, label in [('/', '首页'), ('/tools', '工具'), ('/services', '服务'), ('/news', '新闻动态'), ('/guide', '使用文档'), ('/about', '关于我们')] %}
+                    <a href="{{ url }}" {% if request.url.path == url or (url != '/' and request.url.path.startswith(url + '/')) %}aria-current="page"{% endif %} class="text-cyan-300/80 hover:text-cyan-400 transition-colors font-medium">{{ label }}</a>
+                    {% endfor %}
+                    <a href="https://canvas.singularitynear.com" target="_blank" rel="noopener noreferrer" class="text-cyan-300/80 hover:text-cyan-400 font-medium" aria-label="Canvas（在新标签页打开）">Canvas ↗</a>
                 </div>
             </div>
         </div>
     </nav>
     
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8">
+    <main id="main-content" tabindex="-1" class="{% block main_class %}content-page{% endblock %} max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8">
         {% block content %}{% endblock %}
     </main>
     

@@ -94,6 +94,13 @@ else
             --exclude='__pycache__' \
             --exclude='*.pyc' \
             --exclude='.git' \
+            --exclude='.env' \
+            --exclude='*.db' \
+            --exclude='*.db-*' \
+            --exclude='*.sqlite' \
+            --exclude='*.sqlite-*' \
+            --exclude='*.sqlite3' \
+            --exclude='*.sqlite3-*' \
             --exclude='uv.lock'
         cd "$TARGET_DIR"
     else
@@ -168,9 +175,8 @@ echo_step "Running database migrations..."
 if [ "$DATABASE_URL" = "sqlite:///./mcptools.db" ] || [ -z "$DATABASE_URL" ]; then
     echo_info "Using SQLite database..."
     sudo -u $DEPLOY_USER .venv/bin/python scripts/migrate.py migrate
-    sudo -u $DEPLOY_USER .venv/bin/python scripts/migrate.py seed
 else
-    echo_info "Using remote database: ${DATABASE_URL%%@*}@***"
+    echo_info "Using configured remote database"
     sudo -u $DEPLOY_USER .venv/bin/python scripts/migrate.py migrate
 fi
 

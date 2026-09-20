@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta, timezone
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from sqlalchemy import func
@@ -51,7 +52,7 @@ def get_tool_usage(slug: str, db: Session = Depends(get_db)):
         db.query(func.count(ApiLog.id))
         .filter(
             ApiLog.endpoint.like(f"%/tools/{slug}%"),
-            ApiLog.created_at >= func.now() - func.interval("24 hours"),
+            ApiLog.created_at >= datetime.now(timezone.utc) - timedelta(hours=24),
         )
         .scalar()
     )
@@ -91,7 +92,7 @@ def get_api_stats(db: Session = Depends(get_db)):
 
     last_24h_calls = (
         db.query(func.count(ApiLog.id))
-        .filter(ApiLog.created_at >= func.now() - func.interval("24 hours"))
+        .filter(ApiLog.created_at >= datetime.now(timezone.utc) - timedelta(hours=24))
         .scalar()
     )
 

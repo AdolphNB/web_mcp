@@ -1,71 +1,33 @@
+from xml.etree.ElementTree import Element, SubElement, tostring
+
 from fastapi import APIRouter, Depends, Response
 from sqlalchemy.orm import Session
 from app.database import get_db
-from app.models import Tool
-from fastapi.responses import HTMLResponse
-from datetime import datetime
+from app.models import Tool, News
 
 router = APIRouter()
-
 SITE_URL = "https://singularitynear.com"
 
 
-@router.get("/sitemap.xml", response_class=HTMLResponse)
-async def sitemap(db: Session = Depends(get_db)):
-    tools = db.query(Tool).filter(Tool.is_active == True).all()
+@router.get("/sitemap.xml")
+def sitemap(db: Session = Depends(get_db)):
+    root = Element("urlset", xmlns="http://www.sitemaps.org/schemas/sitemap/0.9")
 
-    sitemap_content = '<?xml version="1.0" encoding="UTF-8"?>\n'
-    sitemap_content += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    def add(path, modified=None):
+        node = SubElement(root, "url")
+        SubElement(node, "loc").text = SITE_URL + path
+        if modified:
+            SubElement(node, "lastmod").text = modified.strftime("%Y-%m-%d")
 
-    sitemap_content += f"""
-  <url>
-    <loc>{SITE_URL}/</loc>
-    <lastmod>{datetime.now().strftime("%Y-%m-%d")}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>"""
-
-    sitemap_content += f"""
-  <url>
-    <loc>{SITE_URL}/tools</loc>
-    <lastmod>{datetime.now().strftime("%Y-%m-%d")}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>"""
-
-    sitemap_content += f"""
-  <url>
-    <loc>{SITE_URL}/docs</loc>
-    <lastmod>{datetime.now().strftime("%Y-%m-%d")}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>"""
-
-    for tool in tools:
-        lastmod = (
-            tool.updated_at.strftime("%Y-%m-%d")
-            if tool.updated_at
-            else datetime.now().strftime("%Y-%m-%d")
-        )
-        sitemap_content += f"""
-  <url>
-    <loc>{SITE_URL}/tools/{tool.slug}</loc>
-    <lastmod>{lastmod}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>"""
-
-    sitemap_content += "\n</urlset>"
-    return Response(content=sitemap_content, media_type="application/xml")
+    for path in ("/", "/tools", "/services", "/about", "/guide", "/news"):
+        add(path)
+    for tool in db.query(Tool).filter(Tool.is_active == True).all():
+        add("/tools/" + tool.slug, tool.updated_at or tool.created_at)
+    for article in db.query(News).filter(News.status == "published").all():
+        add("/news/" + article.slug, article.updated_at or article.published_at)
+    return Response(tostring(root, encoding="utf-8", xml_declaration=True), media_type="application/xml")
 
 
-@router.get("/robots.txt", response_class=HTMLResponse)
-async def robots():
-    robots_content = f"""User-agent: *
-Allow: /
-
-Sitemap: {SITE_URL}/sitemap.xml
-
-Crawl-delay: 1
-"""
-    return Response(content=robots_content, media_type="text/plain")
+@router.get("/robots.txt")
+def robots():
+    return Response(f"User-agent: *\nAllow: /\nDisallow: /api/admin/\n\nSitemap: {SITE_URL}/sitemap.xml\n", media_type="text/plain")

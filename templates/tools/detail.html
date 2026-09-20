@@ -10,7 +10,7 @@
 
 {% block content %}
 <div class="mb-6">
-    <nav class="flex" aria-label="Breadcrumb">
+    <nav class="flex" aria-label="面包屑导航">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
             <li class="inline-flex items-center">
                 <a href="/" class="text-gray-600 hover:text-gray-900">首页</a>
@@ -32,17 +32,17 @@
 </div>
 
 <div class="bg-white rounded-lg shadow-sm border">
-    <div class="p-8">
-        <div class="flex items-start space-x-6">
+    <div class="p-4 sm:p-8">
+        <div class="detail-heading flex items-start gap-4 sm:gap-6">
             {% if tool.icon_url %}
-            <img src="{{ tool.icon_url }}" alt="{{ tool.name }}" class="w-24 h-24 rounded-xl">
+            <img src="{{ tool.icon_url }}" alt="{{ tool.name }}" width="96" height="96" class="w-16 h-16 sm:w-24 sm:h-24 rounded-xl object-contain flex-shrink-0">
             {% else %}
-            <div class="w-24 h-24 rounded-xl bg-blue-100 flex items-center justify-center">
+            <div class="w-16 h-16 sm:w-24 sm:h-24 flex-shrink-0 rounded-xl bg-blue-100 flex items-center justify-center">
                 <span class="text-4xl">🛠️</span>
             </div>
             {% endif %}
             
-            <div class="flex-1">
+            <div class="flex-1 min-w-0">
                 <h1 class="text-3xl font-bold text-gray-900">{{ tool.name }}</h1>
                 
                 {% if tool.category %}
@@ -74,7 +74,9 @@
         {% if tool.api_endpoint %}
         <div class="mt-8 p-4 bg-gray-50 rounded-lg">
             <h2 class="text-lg font-semibold text-gray-900">API 端点</h2>
-            <code class="mt-2 block text-sm text-blue-600 font-mono">{{ tool.api_endpoint }}</code>
+            <code id="api-endpoint" tabindex="0" class="mt-2 block text-sm text-blue-600 font-mono">{{ tool.api_endpoint }}</code>
+            <button type="button" class="copy-button" data-copy-target="api-endpoint" hidden>复制地址</button>
+            <span class="copy-status" role="status" aria-live="polite"></span>
         </div>
         {% endif %}
         

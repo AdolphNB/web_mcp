@@ -1,10 +1,17 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Depends
+from sqlalchemy.orm import Session
+from sqlalchemy import or_
+from app.database import get_db
+from app.models import Tool, News
+from starlette.exceptions import HTTPException as StarletteHTTPException
+from fastapi.exception_handlers import http_exception_handler
 from fastapi.responses import JSONResponse, HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from app.routers import tools
 from app.routers import seo
+from app.routers import management, pages
 from app.middleware import log_api_call
 
 app = FastAPI(
@@ -28,7 +35,6 @@ templates = Jinja2Templates(directory="templates")
 
 # Mount static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
-app.mount("/static", StaticFiles(directory="static"), name="static")
 app.mount("/res", StaticFiles(directory="res"), name="res")
 
 # Add API logging middleware
@@ -36,50 +42,61 @@ app.middleware("http")(log_api_call)
 # Include routers
 app.include_router(tools.router, prefix="/api")
 app.include_router(seo.router)
+app.include_router(management.router)
+app.include_router(pages.router)
 
 
 @app.get("/", response_class=HTMLResponse)
-async def read_root(request: Request):
+def read_root(request: Request, db: Session = Depends(get_db)):
     """公司首页"""
-    return templates.TemplateResponse("index.html", {"request": request})
+    latest_news = db.query(News).filter(News.status == "published").order_by(News.published_at.desc(), News.id.desc()).limit(3).all()
+    return templates.TemplateResponse("index.html", {"request": request, "latest_news": latest_news})
+
+
+@app.get("/health", include_in_schema=False)
+def health():
+    return {"status": "ok"}
 
 
 @app.get("/tools", response_class=HTMLResponse)
-async def tools_list(request: Request):
+def tools_list(request: Request, q: str = "", category: str = "", db: Session = Depends(get_db)):
     """工具列表页面"""
-    from sqlalchemy.orm import Session
-    from app.database import SessionLocal
-    from app.models import Tool
-
-    db: Session = SessionLocal()
-    try:
-        tools = db.query(Tool).filter(Tool.is_active == True).all()
-        return templates.TemplateResponse(
-            "tools/index.html", {"request": request, "tools": tools}
-        )
-    finally:
-        db.close()
+    q = q.strip()
+    category = category.strip()
+    query = db.query(Tool).filter(Tool.is_active == True)
+    total = query.count()
+    categories = [row[0] for row in query.with_entities(Tool.category).distinct()
+                  .order_by(Tool.category).all() if row[0]]
+    if q:
+        query = query.filter(or_(Tool.name.icontains(q, autoescape=True),
+                                 Tool.short_description.icontains(q, autoescape=True),
+                                 Tool.description.icontains(q, autoescape=True)))
+    if category:
+        query = query.filter(Tool.category == category)
+    return templates.TemplateResponse("tools/index.html", {
+        "request": request, "tools": query.order_by(Tool.name, Tool.id).all(),
+        "q": q, "category": category, "categories": categories, "total": total,
+    })
 
 
 @app.get("/tools/{slug}", response_class=HTMLResponse)
-async def tools_detail(slug: str, request: Request):
+def tools_detail(slug: str, request: Request, db: Session = Depends(get_db)):
     """工具详情页面"""
-    from sqlalchemy.orm import Session
-    from app.database import SessionLocal
-    from app.models import Tool
-
-    db: Session = SessionLocal()
-    try:
-        tool = db.query(Tool).filter(Tool.slug == slug, Tool.is_active == True).first()
-        if tool is None:
-            return templates.TemplateResponse(
-                "404.html", {"request": request}, status_code=404
-            )
+    tool = db.query(Tool).filter(Tool.slug == slug, Tool.is_active == True).first()
+    if tool is None:
         return templates.TemplateResponse(
-            "tools/detail.html", {"request": request, "tool": tool}
+            "404.html", {"request": request}, status_code=404
         )
-    finally:
-        db.close()
+    return templates.TemplateResponse(
+        "tools/detail.html", {"request": request, "tool": tool}
+    )
+
+
+@app.exception_handler(StarletteHTTPException)
+async def page_not_found(request: Request, exc: StarletteHTTPException):
+    if exc.status_code == 404 and "text/html" in request.headers.get("accept", "") and not request.url.path.startswith("/api/"):
+        return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
+    return await http_exception_handler(request, exc)
 
 
 @app.exception_handler(Exception)
