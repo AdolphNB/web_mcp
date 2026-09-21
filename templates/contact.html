@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}联系我们 · 在线客服 - 奇点临近{% endblock %}
+{% block description %}了解奇点临近的技术服务与工具，通过 Hermes 在线客服咨询，或通过邮件与我们联系。{% endblock %}
+{% block canonical_url %}/contact{% endblock %}
+{% block og_url %}/contact{% endblock %}
+{% block content %}
+<header class="page-heading"><p class="eyebrow">LET'S TALK</p><h1>聊聊您的想法</h1><p>了解我们的服务、寻找合适的工具，或告诉我们您想解决的问题。</p></header>
+<div class="support-layout">
+    <section class="support-chat" aria-labelledby="support-title">
+        <div class="support-chat-header"><div><h2 id="support-title">奇点小助手</h2><p>由 Hermes 提供智能问答</p></div><span id="support-status" role="status">正在连接…</span></div>
+        <div id="support-messages" class="support-messages" role="log" aria-live="polite" aria-relevant="additions" tabindex="0" aria-label="客服对话记录">
+            <div class="support-message assistant"><span>奇点小助手</span><p>您好！我可以介绍公司的技术服务、工具与使用方式。您想了解什么？报价和具体工期需要通过邮件进一步沟通。</p></div>
+        </div>
+        <div class="support-suggestions" aria-label="快捷咨询"><button type="button" data-support-question="你们提供哪些技术服务？">了解技术服务</button><button type="button" data-support-question="如何开始使用网站上的工具？">工具如何使用</button><button type="button" data-support-question="如何咨询报价和项目合作？">咨询项目合作</button></div>
+        <form id="support-form" class="support-form">
+            <label for="support-question">您的问题</label>
+            <textarea id="support-question" name="message" rows="3" maxlength="1000" required placeholder="例如：我想把现有 API 接入 AI Agent，应该从哪里开始？" aria-describedby="support-privacy" disabled></textarea>
+            <div class="support-form-actions"><button id="support-clear" type="button" class="support-clear">清空当前对话</button><button id="support-send" type="submit" class="primary-button" disabled>发送消息</button></div>
+            <p id="support-feedback" role="status" aria-live="polite"></p>
+            <p id="support-privacy" class="support-note">发送后，对话将交由 Hermes 及其模型服务处理，用于回复咨询。记录会在后台运行时清理超过 7 天的内容。请勿发送密码、密钥或敏感资料。自动回答仅供参考。</p>
+        </form>
+        <noscript><p class="support-note">在线问答需要 JavaScript。您仍可阅读右侧常见问题，或发邮件联系我们。</p></noscript>
+    </section>
+    <aside class="support-aside">
+        <section class="info-card"><p class="eyebrow">CONTACT</p><h2>直接联系团队</h2><p>商务合作、项目报价与具体需求，请通过邮箱沟通。</p><a class="support-email" href="mailto:304633698@qq.com?subject=网站咨询">304633698@qq.com ↗</a><p class="support-note">建议附上需求概要、现有系统及期望时间。</p></section>
+        <section class="info-card"><h2>常见问题</h2><details open><summary>可以提供哪些服务？</summary><p>MCP 工具开发、Web 与 API 集成、AI 应用方案咨询。<a href="/services">查看服务介绍</a>。</p></details><details><summary>怎样获取项目报价？</summary><p>报价需结合功能范围与交付要求评估。请将需求发送至联系邮箱，我们会据此沟通。</p></details><details><summary>在哪里查看工具文档？</summary><p>先在<a href="/tools">工具目录</a>查看介绍，再阅读<a href="/guide">使用指南</a>。</p></details><details><summary>客服暂时离线怎么办？</summary><p>Hermes 连接中断或繁忙时，您可以稍后再试，或直接邮件联系团队。</p></details></section>
+    </aside>
+</div>
+<script src="/static/support.js?v=20260921-support1" defer></script>
+{% endblock %}

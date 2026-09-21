@@ -18,6 +18,7 @@ def client(monkeypatch):
     monkeypatch.setattr("app.analytics.SessionLocal", factory)
     monkeypatch.setenv("SITE_ADMIN_TOKEN", "editor-test-token-" + "x" * 32)
     monkeypatch.setenv("SITE_ANALYTICS_TOKEN", "analytics-test-token-" + "y" * 32)
+    monkeypatch.setenv("SITE_SUPPORT_WORKER_TOKEN", "support-test-token-" + "z" * 32)
     def test_db():
         with factory() as db:
             yield db

@@ -69,3 +69,22 @@ class NewsAudit(Base):
     action = Column(String(30), nullable=False)
     version = Column(Integer, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+
+class SupportJob(Base):
+    __tablename__ = "support_jobs"
+    id = Column(String(36), primary_key=True)
+    owner = Column(String(64), nullable=False, index=True)
+    messages = Column(JSON, nullable=False)
+    status = Column(String(20), nullable=False, default="pending", index=True)
+    answer = Column(Text, nullable=True)
+    lease = Column(String(64), nullable=True)
+    created = Column(Integer, nullable=False, index=True)
+    expires = Column(Integer, nullable=False)
+
+
+class SupportState(Base):
+    __tablename__ = "support_state"
+    key = Column(String(120), primary_key=True)
+    value = Column(Integer, nullable=False)
+    expires = Column(Integer, nullable=False, index=True)

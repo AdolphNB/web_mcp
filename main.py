@@ -11,7 +11,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from app.routers import tools
 from app.routers import seo
-from app.routers import management, pages
+from app.routers import management, pages, support
 from app.middleware import log_api_call
 
 app = FastAPI(
@@ -37,6 +37,7 @@ app.include_router(tools.router, prefix="/api")
 app.include_router(seo.router)
 app.include_router(management.router)
 app.include_router(pages.router)
+app.include_router(support.router)
 
 
 @app.get("/", response_class=HTMLResponse)

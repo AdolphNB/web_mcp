@@ -29,7 +29,7 @@ button, select { cursor: pointer; }
 .empty-action { margin-top: 24px; }
 .copy-button { margin-top: 12px; min-height: 44px; padding: 8px 16px; background: #fff; border: 1px solid #94a3b8; border-radius: 8px; color: #0e7490; }
 .copy-status { display: block; margin-top: 8px; color: #475569; font-size: 14px; }
-@media (max-width: 1023px) {
+@media (max-width: 1100px) {
     .nav-inner { height: auto !important; min-height: 64px; flex-wrap: wrap; align-items: center; }
     .site-nav { position: sticky !important; }
     .menu-toggle:not([hidden]) { display: block; min-height: 44px; }
@@ -42,6 +42,42 @@ button, select { cursor: pointer; }
     .tool-filters > div { width: 100%; }
     .tool-filters .primary-button { flex: 1; }
     .detail-heading h1 { font-size: 1.5rem; }
+}
+.support-launcher { position: fixed; right: 24px; bottom: 24px; z-index: 40; background: #0e7490; color: #fff; padding: 12px 20px; border-radius: 28px; box-shadow: 0 4px 20px #0004; font-weight: 600; }
+.support-launcher:hover { background: #155e75; }
+.support-layout { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(260px, 1fr); gap: 28px; }
+.support-chat { background: #fff; border: 1px solid #cbd5e1; border-radius: 16px; overflow: hidden; }
+.support-chat-header { padding: 22px 24px; background: #ecfeff; border-bottom: 1px solid #cbd5e1; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.support-chat-header h2 { font-size: 20px; font-weight: 700; }
+.support-chat-header p { color: #475569; font-size: 13px; }
+#support-status { font-size: 12px; color: #475569; text-align: right; }
+#support-status.is-online { color: #047857; }
+.support-messages { height: 370px; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 20px; overscroll-behavior: contain; }
+.support-message { max-width: 92%; flex-shrink: 0; }
+.support-message span { display: block; color: #64748b; font-size: 12px; margin-bottom: 6px; }
+.support-message p { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.75; padding: 14px 18px; border-radius: 0 14px 14px; background: #f1f5f9; color: #1e293b; }
+.support-message.user { align-self: flex-end; }
+.support-message.user span { text-align: right; }
+.support-message.user p { background: #0e7490; color: white; border-radius: 14px 0 14px 14px; }
+.support-suggestions { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 24px 16px; }
+.support-suggestions button { padding: 8px 12px; color: #0e7490; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 20px; min-height: 40px; font-size: 13px; }
+.support-form { border-top: 1px solid #e2e8f0; padding: 20px 24px; }
+.support-form label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+.support-form textarea { width: 100%; resize: vertical; max-height: 200px; border: 1px solid #94a3b8; background: #fff; color: #111827; border-radius: 10px; padding: 12px; font: inherit; }
+.support-form textarea::placeholder { color: #64748b; }
+.support-form-actions { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 12px; }
+.support-clear { min-height: 44px; font-size: 13px; color: #475569; text-decoration: underline; }
+.support-chat button:disabled { opacity: .55; cursor: not-allowed; }
+.support-note { font-size: 12px; color: #64748b; margin-top: 14px; line-height: 1.7; }
+#support-feedback { font-size: 14px; color: #0e7490; margin-top: 10px; }
+.support-aside { display: flex; flex-direction: column; gap: 24px; }
+.support-email { font-size: 18px; font-weight: 600; }
+@media (max-width: 767px) {
+    .support-layout { grid-template-columns: 1fr; }
+    .support-chat-header, .support-form, .support-messages { padding: 16px; }
+    .support-suggestions { padding: 0 16px 12px; }
+    .support-messages { height: 330px; }
+    .support-launcher { bottom: max(16px, env(safe-area-inset-bottom)); right: 16px; }
 }
 .page-heading { margin: 8px 0 32px; max-width: 800px; }
 .page-heading h1 { font-size: clamp(1.9rem, 4vw, 3rem); font-weight: 700; line-height: 1.25; margin: 12px 0 18px; }

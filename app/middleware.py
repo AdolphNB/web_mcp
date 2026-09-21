@@ -41,11 +41,11 @@ async def log_api_call(request: Request, call_next):
     prefetch = "prefetch" in (request.headers.get("purpose", "") + request.headers.get("sec-purpose", "")).lower()
     if method == "GET" and response.status_code == 200 and route_name in PAGE_ROUTES and not is_bot and not prefetch:
         await run_in_threadpool(record_page_view, request.url.path)
-    if endpoint.startswith("/api/admin/"):
+    if endpoint.startswith(("/api/admin/", "/api/support/")):
         response.headers["Cache-Control"] = "no-store"
 
     # Only log API endpoints (skip static files and docs)
-    if endpoint.startswith("/api/") and not endpoint.startswith("/api/admin/"):
+    if endpoint.startswith("/api/") and not endpoint.startswith(("/api/admin/", "/api/support/")):
         await run_in_threadpool(
             record_api_call,
             endpoint=endpoint[:255], method=method[:10],

@@ -19,7 +19,7 @@ def sitemap(db: Session = Depends(get_db)):
         if modified:
             SubElement(node, "lastmod").text = modified.strftime("%Y-%m-%d")
 
-    for path in ("/", "/tools", "/services", "/about", "/guide", "/news"):
+    for path in ("/", "/tools", "/services", "/about", "/guide", "/news", "/contact"):
         add(path)
     for tool in db.query(Tool).filter(Tool.is_active == True).all():
         add("/tools/" + tool.slug, tool.updated_at or tool.created_at)

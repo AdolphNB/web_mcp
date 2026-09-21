@@ -8,7 +8,7 @@ from app.database import SessionLocal
 from app.models import PageViewDaily
 
 logger = logging.getLogger(__name__)
-PAGE_ROUTES = {"read_root", "tools_list", "tools_detail", "services_page", "about_page", "guide_page", "news_list", "news_detail"}
+PAGE_ROUTES = {"read_root", "tools_list", "tools_detail", "services_page", "about_page", "guide_page", "news_list", "news_detail", "contact_page"}
 
 
 def record_page_view(path: str):

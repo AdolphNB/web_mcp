@@ -30,7 +30,7 @@
     <link rel="icon" type="image/png" href="/res/log.png">
 
     <link rel="stylesheet" href="/static/tailwind.css">
-    <link rel="stylesheet" href="/static/site.css">
+    <link rel="stylesheet" href="/static/site.css?v=20260921-support1">
     <script src="/static/site.js" defer></script>
         {% block extra_css %}{% endblock %}
 </head>
@@ -47,7 +47,7 @@
                 </div>
                 <button class="menu-toggle" type="button" aria-controls="primary-navigation" aria-expanded="false" hidden>菜单</button>
                 <div id="primary-navigation" class="nav-links flex items-center space-x-8">
-                    {% for url, label in [('/', '首页'), ('/tools', '工具'), ('/services', '服务'), ('/news', '新闻动态'), ('/guide', '使用文档'), ('/about', '关于我们')] %}
+                    {% for url, label in [('/', '首页'), ('/tools', '工具'), ('/services', '服务'), ('/news', '新闻动态'), ('/guide', '使用文档'), ('/about', '关于我们'), ('/contact', '联系我们')] %}
                     <a href="{{ url }}" {% if request.url.path == url or (url != '/' and request.url.path.startswith(url + '/')) %}aria-current="page"{% endif %} class="text-cyan-300/80 hover:text-cyan-400 transition-colors font-medium">{{ label }}</a>
                     {% endfor %}
                     <a href="https://canvas.singularitynear.com" target="_blank" rel="noopener noreferrer" class="text-cyan-300/80 hover:text-cyan-400 font-medium" aria-label="Canvas（在新标签页打开）">Canvas ↗</a>
@@ -75,5 +75,6 @@
             </div>
         </div>
     </footer>
+    {% if request.url.path != '/contact' %}<a class="support-launcher" href="/contact" aria-label="联系我们，打开在线客服">在线咨询 <span aria-hidden="true">↗</span></a>{% endif %}
 </body>
 </html>
