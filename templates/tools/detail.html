@@ -13,40 +13,40 @@
     <nav class="flex" aria-label="面包屑导航">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
             <li class="inline-flex items-center">
-                <a href="/" class="text-gray-600 hover:text-gray-900">首页</a>
+                <a href="/" class="ink-secondary hover:text-gray-900">首页</a>
             </li>
             <li>
                 <div class="flex items-center">
-                    <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-                    <a href="/tools" class="ml-1 text-gray-600 hover:text-gray-900">工具列表</a>
+                    <svg class="w-4 h-4 ink-muted" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                    <a href="/tools" class="ml-1 ink-secondary hover:text-gray-900">工具列表</a>
                 </div>
             </li>
             <li>
                 <div class="flex items-center">
-                    <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-                    <span class="ml-1 text-gray-500">{{ tool.name }}</span>
+                    <svg class="w-4 h-4 ink-muted" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                    <span class="ml-1 ink-muted">{{ tool.name }}</span>
                 </div>
             </li>
         </ol>
     </nav>
 </div>
 
-<div class="bg-white rounded-lg shadow-sm border">
+<div class="surface-panel rounded-lg shadow-sm border">
     <div class="p-4 sm:p-8">
         <div class="detail-heading flex items-start gap-4 sm:gap-6">
             {% if tool.icon_url %}
             <img src="{{ tool.icon_url }}" alt="{{ tool.name }}" width="96" height="96" class="w-16 h-16 sm:w-24 sm:h-24 rounded-xl object-contain flex-shrink-0">
             {% else %}
-            <div class="w-16 h-16 sm:w-24 sm:h-24 flex-shrink-0 rounded-xl bg-blue-100 flex items-center justify-center">
-                <span class="text-4xl">🛠️</span>
+            <div class="w-16 h-16 sm:w-24 sm:h-24 flex-shrink-0 rounded-xl accent-surface flex items-center justify-center">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m8 6-6 6 6 6m8-12 6 6-6 6M14 4l-4 16"/></svg>
             </div>
             {% endif %}
             
             <div class="flex-1 min-w-0">
-                <h1 class="text-3xl font-bold text-gray-900">{{ tool.name }}</h1>
+                <h1 class="text-3xl font-bold ink-primary">{{ tool.name }}</h1>
                 
                 {% if tool.category %}
-                <span class="mt-2 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                <span class="mt-2 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium accent-surface ink-accent">
                     {{ tool.category }}
                 </span>
                 {% endif %}
@@ -54,16 +54,16 @@
         </div>
         
         <div class="mt-8">
-            <h2 class="text-lg font-semibold text-gray-900">描述</h2>
-            <p class="mt-2 text-gray-600 whitespace-pre-line">{{ tool.description or "暂无描述" }}</p>
+            <h2 class="text-lg font-semibold ink-primary">描述</h2>
+            <p class="mt-2 ink-secondary whitespace-pre-line">{{ tool.description or "暂无描述" }}</p>
         </div>
         
         {% if tool.tags %}
         <div class="mt-8">
-            <h2 class="text-lg font-semibold text-gray-900">标签</h2>
+            <h2 class="text-lg font-semibold ink-primary">标签</h2>
             <div class="mt-2 flex flex-wrap gap-2">
                 {% for tag in tool.tags %}
-                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium tag-surface ink-secondary">
                     {{ tag }}
                 </span>
                 {% endfor %}
@@ -72,16 +72,16 @@
         {% endif %}
         
         {% if tool.api_endpoint %}
-        <div class="mt-8 p-4 bg-gray-50 rounded-lg">
-            <h2 class="text-lg font-semibold text-gray-900">API 端点</h2>
-            <code id="api-endpoint" tabindex="0" class="mt-2 block text-sm text-blue-600 font-mono">{{ tool.api_endpoint }}</code>
+        <div class="mt-8 p-4 surface-inset rounded-lg">
+            <h2 class="text-lg font-semibold ink-primary">API 端点</h2>
+            <code id="api-endpoint" tabindex="0" class="mt-2 block text-sm ink-accent font-mono">{{ tool.api_endpoint }}</code>
             <button type="button" class="copy-button" data-copy-target="api-endpoint" hidden>复制地址</button>
             <span class="copy-status" role="status" aria-live="polite"></span>
         </div>
         {% endif %}
         
         <div class="mt-8 pt-6 border-t">
-            <a href="/tools" class="inline-flex items-center text-blue-600 hover:text-blue-800">
+            <a href="/tools" class="inline-flex items-center ink-accent hover:text-blue-800">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                 返回工具列表
             </a>

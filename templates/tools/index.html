@@ -13,21 +13,21 @@
     <nav class="flex" aria-label="面包屑导航">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
             <li class="inline-flex items-center">
-                <a href="/" class="text-gray-600 hover:text-gray-900">首页</a>
+                <a href="/" class="ink-secondary hover:text-gray-900">首页</a>
             </li>
             <li>
                 <div class="flex items-center">
-                    <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-                    <span class="ml-1 text-gray-900">工具列表</span>
+                    <svg class="w-4 h-4 ink-muted" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                    <span class="ml-1 ink-primary">工具列表</span>
                 </div>
             </li>
         </ol>
     </nav>
 </div>
 
-<div class="mb-8">
-    <h1 class="text-3xl font-bold text-gray-900">工具列表</h1>
-    <p class="mt-2 text-gray-600">探索我们精心打造的工具集合</p>
+<div class="page-heading">
+    <p class="eyebrow">THE TOOLKIT</p><h1 class="text-3xl font-bold ink-primary">工具列表</h1>
+    <p class="mt-2 ink-secondary">探索我们精心打造的工具集合</p>
 </div>
 
 <form method="get" action="/tools" class="tool-filters" role="search" aria-label="搜索工具">
@@ -50,35 +50,35 @@
 {% if tools %}
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     {% for tool in tools %}
-    <div class="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow duration-200">
+    <div class="surface-panel tool-card">
         <a href="/tools/{{ tool.slug }}" class="tool-card-link block">
             <div class="p-6">
                 <div class="flex items-center space-x-4 mb-4">
                     {% if tool.icon_url %}
                     <img src="{{ tool.icon_url }}" alt="{{ tool.name }}" width="64" height="64" loading="lazy" class="w-16 h-16 rounded-lg object-contain flex-shrink-0">
                     {% else %}
-                    <div class="w-16 h-16 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
-                        <span class="text-2xl">🛠️</span>
+                    <div class="w-16 h-16 rounded-lg accent-surface flex items-center justify-center flex-shrink-0">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m8 6-6 6 6 6m8-12 6 6-6 6M14 4l-4 16"/></svg>
                     </div>
                     {% endif %}
-                    <h2 class="text-xl font-semibold text-gray-900">{{ tool.name }}</h2>
+                    <h2 class="text-xl font-semibold ink-primary">{{ tool.name }}</h2>
                 </div>
                 
                 {% if tool.short_description %}
-                <p class="text-gray-600 mb-4 line-clamp-2">{{ tool.short_description }}</p>
+                <p class="ink-secondary mb-4 line-clamp-2">{{ tool.short_description }}</p>
                 {% else %}
-                <p class="text-gray-600 mb-4 line-clamp-2">{{ tool.description or "暂无描述" }}</p>
+                <p class="ink-secondary mb-4 line-clamp-2">{{ tool.description or "暂无描述" }}</p>
                 {% endif %}
                 
                 <div class="flex items-center justify-between">
                     {% if tool.category %}
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium accent-surface ink-accent">
                         {{ tool.category }}
                     </span>
                     {% else %}
                     <span></span>
                     {% endif %}
-                    <span class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                    <span class="ink-accent hover:text-blue-800 text-sm font-medium">
                         查看详情 →
                     </span>
                 </div>
@@ -86,12 +86,12 @@
                 {% if tool.tags %}
                 <div class="mt-4 flex flex-wrap gap-1">
                     {% for tag in tool.tags[:3] %}
-                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-700">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium tag-surface ink-secondary">
                         {{ tag }}
                     </span>
                     {% endfor %}
                     {% if tool.tags|length > 3 %}
-                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-500">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium tag-surface ink-muted">
                         +{{ tool.tags|length - 3 }}
                     </span>
                     {% endif %}
@@ -103,17 +103,17 @@
     {% endfor %}
 </div>
 {% else %}
-<div class="bg-white rounded-lg shadow-sm border p-12 text-center">
-    <div class="mx-auto w-24 h-24 mb-6 bg-gray-100 rounded-full flex items-center justify-center">
-        <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
+<div class="surface-panel rounded-lg shadow-sm border p-12 text-center">
+    <div class="mx-auto w-24 h-24 mb-6 tag-surface rounded-full flex items-center justify-center">
+        <svg class="w-12 h-12 ink-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
     </div>
     {% if q or category %}
-    <h2 class="text-lg font-medium text-gray-900 mb-2">没有找到匹配的工具</h2>
-    <p class="text-gray-500">试试更简短的关键词，或选择其他分类。</p>
+    <h2 class="text-lg font-medium ink-primary mb-2">没有找到匹配的工具</h2>
+    <p class="ink-muted">试试更简短的关键词，或选择其他分类。</p>
     <a href="/tools" class="primary-button empty-action">清除筛选，查看全部工具</a>
     {% else %}
-    <h2 class="text-lg font-medium text-gray-900 mb-2">工具正在准备中</h2>
-    <p class="text-gray-500">您可以先阅读 API 文档，了解接口使用方式。</p>
+    <h2 class="text-lg font-medium ink-primary mb-2">工具正在准备中</h2>
+    <p class="ink-muted">您可以先阅读 API 文档，了解接口使用方式。</p>
     <a href="/docs" class="primary-button empty-action">查看 API 文档</a>
     {% endif %}
 </div>

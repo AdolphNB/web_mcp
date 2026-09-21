@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 560" fill="none">
+  <defs><radialGradient id="halo"><stop stop-color="#54D6C7" stop-opacity=".12"/><stop offset="1" stop-color="#54D6C7" stop-opacity="0"/></radialGradient></defs>
+  <circle cx="280" cy="280" r="270" fill="url(#halo)"/>
+  <g stroke="#294149" stroke-width="1">
+    <circle cx="280" cy="280" r="220"/>
+    <circle cx="280" cy="280" r="174" stroke-dasharray="2 9"/>
+    <circle cx="280" cy="280" r="120"/>
+    <path d="M280 34v56m0 380v56M34 280h56m380 0h56M124 124l40 40m232 232 40 40M124 436l40-40m232-232 40-40"/>
+  </g>
+  <path d="M60 280a220 220 0 0 1 220-220M500 280a220 220 0 0 1-220 220" stroke="#54D6C7" stroke-opacity=".65" stroke-width="2"/>
+  <g transform="translate(188 188) scale(2.875)">
+    <path d="M49.5 18.7A22 22 0 1 0 45.3 49.5" stroke="#E8F3F3" stroke-width="3" stroke-linecap="round"/>
+    <path d="M18.7 14.5A22 22 0 0 1 49.5 45.3" stroke="#54D6C7" stroke-width="3" stroke-linecap="round"/>
+    <path d="M22.5 24.2A12.3 12.3 0 1 0 39.8 22.5" stroke="#54D6C7" stroke-width="2.2" stroke-linecap="round"/>
+    <circle cx="32" cy="32" r="4.5" fill="#E8F3F3"/>
+  </g>
+  <g fill="#54D6C7"><circle cx="280" cy="60" r="5"/><circle cx="500" cy="280" r="5"/></g>
+  <circle cx="124.4" cy="435.6" r="5" fill="#E8F3F3"/>
+</svg>

@@ -6,7 +6,7 @@ def test_read_root(client):
     assert 'id="services"' in response.text
     assert 'href="/about"' in response.text
     assert 'href="mailto:304633698@qq.com"' in response.text
-    assert 'href="/static/tailwind.css"' in response.text
+    assert 'href="/static/tailwind.css?' in response.text
     assert "cdn.tailwindcss.com" not in response.text
 
 
