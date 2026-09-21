@@ -16,19 +16,11 @@ PROJECT_NAME="mcptools"
 PROJECT_DIR="/var/www/mcptools"
 DEPLOY_USER="www-data"
 SYSTEM_PYTHON="/usr/bin/python3"
+DATA_DIR="/var/lib/mcptools"
 
 # UV installation path
 # Use pip-installed UV to avoid snap permission issues
 UV_PATH="/opt/uv/bin/uv"
-
-# Ensure UV is installed (pip version)
-if [ ! -f "$UV_PATH" ]; then
-    echo_warn "UV not found at $UV_PATH. Installing via pip..."
-    mkdir -p /opt/uv
-    pip3 install uv --target /opt/uv --break-system-packages
-fi
-
-
 
 # Colors
 RED='\033[0;31m'
@@ -56,7 +48,25 @@ echo ""
 # Step 1: System dependencies
 echo_step "Installing system dependencies..."
 apt-get update
-apt-get install -y python3 python3-pip nginx supervisor
+apt-get install -y python3 python3-pip nginx supervisor logrotate
+
+# Ensure UV is installed (pip version)
+if [ ! -f "$UV_PATH" ]; then
+    echo_warn "UV not found at $UV_PATH. Installing via pip..."
+    mkdir -p /opt/uv
+    pip3 install uv --target /opt/uv --break-system-packages
+fi
+
+
+
+# Validate the certificate before interrupting a running site.
+bash ./deploy/setup-nginx.sh --check-certificate
+
+# Stop workers before moving SQLite so no writes are lost during the switch.
+# Existing files in the checkout are retained for recovery.
+if supervisorctl status "$PROJECT_NAME" >/dev/null 2>&1; then
+    supervisorctl stop "$PROJECT_NAME"
+fi
 
 # Step 2: Create project directory and set permissions
 echo_step "Setting up project directory..."
@@ -66,7 +76,8 @@ mkdir -p "/var/run/${PROJECT_NAME}"
 mkdir -p "/var/www/.cache"
 
 # Set ownership before creating venv
-chown -R $DEPLOY_USER:$DEPLOY_USER "$PROJECT_DIR" "/var/log/${PROJECT_NAME}" "/var/run/${PROJECT_NAME}" "/var/www/.cache"
+chown -R $DEPLOY_USER:$DEPLOY_USER "/var/log/${PROJECT_NAME}" "/var/run/${PROJECT_NAME}" "/var/www/.cache"
+chown root:$DEPLOY_USER "$PROJECT_DIR"
 chmod 750 "$PROJECT_DIR"
 
 # Step 3: Copy application files
@@ -100,8 +111,7 @@ else
             --exclude='*.sqlite' \
             --exclude='*.sqlite-*' \
             --exclude='*.sqlite3' \
-            --exclude='*.sqlite3-*' \
-            --exclude='uv.lock'
+            --exclude='*.sqlite3-*'
         cd "$TARGET_DIR"
     else
         echo_error "deploy directory not found. Run this script from the project root."
@@ -112,7 +122,8 @@ fi
 
 # Ensure project directory ownership after rsync
 echo_info "Ensuring correct ownership..."
-chown -R $DEPLOY_USER:$DEPLOY_USER "$PROJECT_DIR"
+chown -R root:$DEPLOY_USER "$PROJECT_DIR"
+chmod -R u=rwX,g=rX,o= "$PROJECT_DIR"
 chmod 750 "$PROJECT_DIR"
 
 # Step 4: Create virtual environment with UV
@@ -130,7 +141,7 @@ if [ ! -d "$PROJECT_DIR/.venv" ]; then
     echo_info "Creating virtual environment with UV (using system Python: $SYSTEM_PYTHON)..."
     # Use --python to specify system Python
     # Use --no-managed-python to prevent UV from downloading or using managed Python
-    sudo -u $DEPLOY_USER "$UV_PATH" venv \
+    "$UV_PATH" venv \
         --python "$SYSTEM_PYTHON" \
         --no-managed-python \
 "$PROJECT_DIR/.venv"
@@ -141,7 +152,7 @@ fi
 
 # Step 5: Install dependencies with UV
 echo_step "Installing dependencies with UV..."
-sudo -u $DEPLOY_USER "$UV_PATH" sync --no-dev
+"$UV_PATH" sync --locked --no-dev
 
 echo_info "All dependencies installed successfully"
 
@@ -165,33 +176,30 @@ EOF
     fi
 fi
 
-# Load environment variables for migration
-set -a
-source .env
-set +a
-
-# Step 7: Database migration
-echo_step "Running database migrations..."
-if [ "$DATABASE_URL" = "sqlite:///./mcptools.db" ] || [ -z "$DATABASE_URL" ]; then
-    echo_info "Using SQLite database..."
-    sudo -u $DEPLOY_USER .venv/bin/python scripts/migrate.py migrate
-else
-    echo_info "Using configured remote database"
-    sudo -u $DEPLOY_USER .venv/bin/python scripts/migrate.py migrate
-fi
-
 # Step 8: Set permissions
 echo_step "Setting permissions..."
-chown -R $DEPLOY_USER:$DEPLOY_USER "$PROJECT_DIR"
+chown -R root:$DEPLOY_USER "$PROJECT_DIR"
+chmod -R u=rwX,g=rX,o= "$PROJECT_DIR"
 chmod 750 "$PROJECT_DIR"
+
+install -d -o "$DEPLOY_USER" -g "$DEPLOY_USER" -m 750 "$DATA_DIR"
+.venv/bin/python scripts/prepare_sqlite.py --project "$PROJECT_DIR" --data-dir "$DATA_DIR"
+chown -R "$DEPLOY_USER:$DEPLOY_USER" "$DATA_DIR"
+chmod -R u=rwX,g=,o= "$DATA_DIR"
+chown root:$DEPLOY_USER .env
+chmod 640 .env
+# python-dotenv parses .env in the application. Never source it as root.
+echo_step "Running database migrations..."
+sudo -u "$DEPLOY_USER" .venv/bin/python scripts/migrate.py migrate
 
 # Step 9: Setup Nginx
 echo_step "Configuring Nginx..."
-./deploy/setup-nginx.sh
+bash ./deploy/setup-nginx.sh
 
 # Step 10: Setup Supervisor
 echo_step "Configuring Supervisor..."
-./deploy/setup-gunicorn.sh
+bash ./deploy/setup-gunicorn.sh
+install -o root -g root -m 644 deploy/logrotate.conf /etc/logrotate.d/mcptools
 
 # Step 11: Start services
 echo_step "Starting services..."

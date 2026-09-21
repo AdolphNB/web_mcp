@@ -47,6 +47,11 @@ fi
 
 mkdir -p "$CERT_DIR"
 if [ ! -f "$CERT_PATH" ] || [ ! -f "$KEY_PATH" ]; then
+    if [ "${ALLOW_SELF_SIGNED_CERT:-0}" != "1" ]; then
+        echo_error "A trusted certificate is required. Install it before deploying."
+        echo_error "Local testing only: explicitly set ALLOW_SELF_SIGNED_CERT=1."
+        exit 1
+    fi
     echo_warn "SSL certificate not found. Generating a self-signed certificate for local deployment..."
     openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
         -keyout "$KEY_PATH" \
@@ -54,6 +59,25 @@ if [ ! -f "$CERT_PATH" ] || [ ! -f "$KEY_PATH" ]; then
         -subj "/CN=singularitynear.com" >/dev/null 2>&1
     chmod 600 "$KEY_PATH"
     chmod 644 "$CERT_PATH"
+fi
+
+if [ "${ALLOW_SELF_SIGNED_CERT:-0}" != "1" ]; then
+    openssl x509 -in "$CERT_PATH" -noout -checkend 86400
+    openssl verify -purpose sslserver -verify_hostname singularitynear.com \
+        -untrusted "$CERT_PATH" "$CERT_PATH"
+    openssl verify -purpose sslserver -verify_hostname www.singularitynear.com \
+        -untrusted "$CERT_PATH" "$CERT_PATH"
+    CERT_PUBLIC_KEY="$(openssl x509 -in "$CERT_PATH" -pubkey -noout)"
+    KEY_PUBLIC_KEY="$(openssl pkey -in "$KEY_PATH" -pubout)"
+    if [ "$CERT_PUBLIC_KEY" != "$KEY_PUBLIC_KEY" ]; then
+        echo_error "The certificate and private key do not match."
+        exit 1
+    fi
+fi
+
+# Used before stopping the application. No nginx configuration changes in this mode.
+if [ "${1:-}" = "--check-certificate" ]; then
+    exit 0
 fi
 
 # Backup existing config if it exists

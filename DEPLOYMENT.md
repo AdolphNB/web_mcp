@@ -2,6 +2,9 @@
 
 本部署脚本使用 **UV** 进行环境管理和依赖安装，同时解决权限问题，适用于生产环境。
 
+安全加固后的部署前置检查、数据库保留方式与回退步骤见 [HARDENING.md](HARDENING.md)。
+首次部署前需要准备覆盖主域名和 www 的可信 HTTPS 证书；部署会先验证证书，再暂停应用进入维护窗口。
+
 ## 问题背景
 
 原问题：UV 创建的虚拟环境使用符号链接指向 `/root/.local/share/uv/python/...`，导致 www-data 用户无法访问，Supervisor 启动失败：
@@ -228,9 +231,12 @@ sudo supervisorctl restart mcptools
 重新设置权限：
 
 ```bash
-sudo chown -R www-data:www-data /var/www/mcptools
+sudo chown -R root:www-data /var/www/mcptools
+sudo chmod -R u=rwX,g=rX,o= /var/www/mcptools
 sudo chmod 750 /var/www/mcptools
-sudo chmod -R 755 /var/www/mcptools/.venv
+# 仅运行数据可写；先按 HARDENING.md 完成旧 SQLite 文件迁移。
+sudo chown -R www-data:www-data /var/lib/mcptools
+sudo chmod -R u=rwX,g=,o= /var/lib/mcptools
 sudo supervisorctl restart mcptools
 ```
 

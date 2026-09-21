@@ -6,7 +6,7 @@ from app.models import Tool, News
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.exception_handlers import http_exception_handler
 from fastapi.responses import JSONResponse, HTMLResponse
-from fastapi.middleware.cors import CORSMiddleware
+from app.http_security import ScopedCORSMiddleware, SecurityHeadersMiddleware, SECURITY_HEADERS
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from app.routers import tools
@@ -20,15 +20,8 @@ app = FastAPI(
     version="0.1.0",
 )
 
-# CORS for development: allow all origins
-origins = ["*"]
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+app.add_middleware(ScopedCORSMiddleware)
+app.add_middleware(SecurityHeadersMiddleware)
 
 # Configure Jinja2 templates
 templates = Jinja2Templates(directory="templates")
@@ -105,4 +98,5 @@ async def global_exception_handler(request: Request, exc: Exception):
     return JSONResponse(
         status_code=500,
         content={"detail": "Internal Server Error"},
+        headers=SECURITY_HEADERS,
     )

@@ -57,8 +57,8 @@ fi
 
 # Verify permissions
 echo_info "Verifying virtual environment permissions..."
-chown -R $DEPLOY_USER:$DEPLOY_USER "$VENV_DIR"
-chmod -R 755 "$VENV_DIR"
+chown -R root:$DEPLOY_USER "$VENV_DIR"
+chmod -R u=rwX,g=rX,o= "$VENV_DIR"
 
 # Verify UV and Python in venv
 if ! sudo -u $DEPLOY_USER "$VENV_DIR/bin/python" --version &> /dev/null; then
