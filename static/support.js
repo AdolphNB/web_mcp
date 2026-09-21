@@ -49,14 +49,15 @@
     }
     form.addEventListener("submit", async event => {
         event.preventDefault();
-        const message = input.value.trim();
+        const draft = input.value;
+        const message = draft.trim();
         if (!message || busy || !online) return;
         busy = true;
         controls();
         feedback.textContent = "正在联系 Hermes，通常需要十几秒，请稍候…";
         bubble("user", message);
+        input.value = "";
         const requestId = crypto.randomUUID();
-        let submitted = false;
         try {
             // Retry uncertain delivery with the SAME id: the server deduplicates it.
             let job;
@@ -68,7 +69,6 @@
                     if (attempt || !["TimeoutError", "TypeError"].includes(error.name)) throw error;
                 }
             }
-            submitted = true;
             const deadline = Date.now() + 155000;
             while (Date.now() < deadline) {
                 await new Promise(resolve => setTimeout(resolve, 2000));
@@ -78,15 +78,15 @@
                     bubble("assistant", result.answer);
                     history.push({role: "user", content: message}, {role: "assistant", content: result.answer.slice(0, 3000)});
                     history = history.slice(-8);
-                    input.value = "";
                     feedback.textContent = "已回复。您可以继续提问。";
                     return;
                 }
             }
             throw new Error(fallback);
         } catch (error) {
+            input.value = draft;
             feedback.textContent = (error.message && !["TypeError", "TimeoutError"].includes(error.name)) ? error.message : fallback;
-            if (submitted) feedback.textContent += " 您的问题已保留在输入框中。";
+            feedback.textContent += " 您的问题已恢复到输入框中，可稍后重试。";
         } finally {
             busy = false;
             await checkStatus();
