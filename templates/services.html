@@ -1,14 +1,34 @@
 {% extends "base.html" %}
 {% block title %}技术服务 - 奇点临近{% endblock %}
+{% block description %}提供 MCP 工具开发、API 集成、AI 应用方案，以及 STM32 固件、ESP32 物联网和嵌入式 Linux 系统与应用开发服务。{% endblock %}
 {% block canonical_url %}/services{% endblock %}
 {% block og_url %}/services{% endblock %}
 {% block content %}
-<header class="page-heading"><p class="eyebrow">OUR SERVICES</p><h1>让技术落到具体业务中</h1><p>从需求梳理到接口集成，围绕您的实际工作流程设计方案。</p></header>
+<header class="page-heading"><p class="eyebrow">OUR SERVICES</p><h1>让技术落到具体业务中</h1><p>从软件接口到嵌入式设备，围绕您的实际工作流程设计方案。</p></header>
 <div class="info-grid">
     <section class="info-card"><span class="step-number">01 / MCP</span><h2>MCP 工具开发</h2><p>将已有系统与 AI Agent 连接，整理工具接口、参数和使用说明。</p><ul><li>已有 API 的工具封装</li><li>数据查询与业务操作集成</li><li>调用权限与错误处理设计</li></ul><a href="/tools">浏览工具目录 →</a></section>
     <section class="info-card"><span class="step-number">02 / API</span><h2>应用与接口集成</h2><p>围绕业务需要，设计可复用的 Web 服务与数据交互接口。</p><ul><li>网站与后端服务开发</li><li>系统之间的数据连接</li><li>部署、接口文档与维护交接</li></ul><a href="/guide">了解接入方式 →</a></section>
     <section class="info-card"><span class="step-number">03 / AI</span><h2>AI 应用方案</h2><p>梳理适合自动化的任务，明确输入、输出以及人工审核环节。</p><ul><li>需求与可行性评估</li><li>Agent 工作流程设计</li><li>原型验证与迭代优化</li></ul><a href="mailto:304633698@qq.com?subject=AI%20应用方案咨询">咨询需求 →</a></section>
 </div>
+<section id="embedded" class="embedded-services" aria-labelledby="embedded-heading">
+    <div class="section-heading"><div><p class="eyebrow">EMBEDDED DEVELOPMENT</p><h2 id="embedded-heading">从固件到系统，<br>连接真实设备。</h2></div><p class="section-intro">面向控制、采集与联网场景，<br class="desktop-break">提供 STM32、ESP32 与 Linux 开发服务。</p></div>
+    <div class="info-grid embedded-grid">
+        <article class="embedded-card" id="stm32">
+            <img src="/res/services/stm32-development.webp" alt="微控制器开发板与传感器模块的概念示意图" width="960" height="640" loading="lazy" decoding="async">
+            <div class="embedded-card-body"><span class="step-number">04 / STM32</span><h3>STM32 固件与控制开发</h3><p>围绕具体板卡和外设，开发设备固件，梳理采集、控制与通信流程。</p><ul><li>裸机与 FreeRTOS 任务开发</li><li>UART、I²C、SPI 外设与传感器接入</li><li>数据采集、执行控制与板级联调</li><li>低功耗与固件升级方案评估</li></ul><a class="text-link" href="/contact">咨询 STM32 项目 <span aria-hidden="true">↗</span></a></div>
+        </article>
+        <article class="embedded-card" id="esp32">
+            <img src="/res/services/esp32-development.webp" alt="无线物联网开发板与环境传感器的概念示意图" width="960" height="640" loading="lazy" decoding="async">
+            <div class="embedded-card-body"><span class="step-number">05 / ESP32</span><h3>ESP32 物联网开发</h3><p>连接传感器、无线网络和应用服务，让设备数据进入实际业务流程。</p><ul><li>ESP-IDF 固件开发与板级调试</li><li>Wi-Fi / BLE 配网与设备通信</li><li>MQTT / HTTP 数据上报与服务对接</li><li>OTA 升级、异常重连与运行日志</li></ul><a class="text-link" href="/contact">咨询 ESP32 项目 <span aria-hidden="true">↗</span></a></div>
+        </article>
+        <article class="embedded-card" id="embedded-linux">
+            <img src="/res/services/linux-development.webp" alt="带散热器与网络接口的嵌入式 Linux 网关概念示意图" width="960" height="640" loading="lazy" decoding="async">
+            <div class="embedded-card-body"><span class="step-number">06 / LINUX</span><h3>嵌入式 Linux 开发</h3><p>面向网关、边缘设备与定制终端，衔接底层系统、设备接口和上层应用。</p><ul><li>BSP、设备树适配与驱动联调</li><li>系统裁剪、启动配置与部署</li><li>C / C++ 应用与后台服务开发</li><li>串口、网络通信与边缘网关集成</li></ul><a class="text-link" href="/contact">咨询 Linux 项目 <span aria-hidden="true">↗</span></a></div>
+        </article>
+    </div>
+    <p class="embedded-note">图片为 AI 生成的硬件概念示意，非已交付项目或指定型号实拍。具体开发范围、无线能力及交付方式，结合芯片型号、板卡资料和需求评估确认。</p>
+    <div class="embedded-handoff"><div><h3>从设备端，一路连接到应用端</h3><p>设备数据也可以与现有 Web 服务、API 或 AI 工作流程对接。沟通时可提供芯片／板卡型号、外设清单、现有代码情况和预期功能。</p></div><a class="secondary-button" href="mailto:304633698@qq.com?subject=嵌入式设备开发咨询">发送项目需求 <span aria-hidden="true">↗</span></a></div>
+</section>
 <section class="info-card section-space"><h2>如何开始合作</h2><ol class="process-list"><li><strong>描述问题</strong><p>说明您希望解决的业务问题、现有系统和期望时间。</p></li><li><strong>明确范围</strong><p>沟通可实现的功能、交付内容和验收方式。</p></li><li><strong>分步交付</strong><p>先验证核心流程，再根据反馈完善体验。</p></li></ol></section>
 <aside class="contact-banner"><div><h2>聊聊您的项目</h2><p>邮件中可附上需求概要，我们会据此沟通具体方案。</p></div><a class="primary-button" href="mailto:304633698@qq.com?subject=技术服务咨询">邮件联系</a></aside>
 {% endblock %}

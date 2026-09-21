@@ -146,7 +146,9 @@ def reply(job_id: UUID, response: Response, owner: str = Depends(session_owner),
 
 def public_context(db):
     lines = ["公司：深圳市奇点临近计算机技术研发有限责任公司。所在地：深圳。邮箱：304633698@qq.com。",
-        "服务：MCP 工具开发、应用与 API 集成、AI 应用方案咨询。合作流程：描述问题、明确范围、分步交付。",
+        "服务：MCP 工具开发、应用与 API 集成、AI 应用方案咨询，以及嵌入式设备开发。合作流程：描述问题、明确范围、分步交付。",
+        "嵌入式业务：STM32 固件、裸机/FreeRTOS、UART/I2C/SPI 外设、采集控制与板级联调；ESP32 的 ESP-IDF 开发、Wi-Fi/BLE 配网、MQTT/HTTP 服务对接和 OTA；嵌入式 Linux 的 BSP/设备树适配、驱动联调、系统裁剪部署、C/C++ 应用与网关集成。详见 /services#embedded。",
+        "嵌入式咨询需了解芯片或板卡型号、外设清单、现有代码和预期功能。无线能力取决于具体芯片，范围与交付需评估确认。页面图片是 AI 生成的概念示意，不能描述为真实案例、指定型号实拍或已交付产品。",
         "页面：/services 服务介绍；/tools 工具目录；/guide 使用指南；/news 新闻；/about 关于我们。",
         "没有公开报价、联系电话、具体办公地址或响应时间承诺。定价、工期和商务合作需邮件沟通。工具目录不代表每个端点已实现。"]
     for tool in db.query(Tool).filter(Tool.is_active == True).order_by(Tool.id).limit(30):

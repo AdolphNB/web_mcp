@@ -112,6 +112,38 @@ details { border-top: 1px solid var(--border); padding: 18px 0; }summary { curso
 .tools-spotlight > div > p:not(.eyebrow) { color: var(--muted); font-size: 14px; margin-top: 20px; max-width: 430px; }.tool-path { border-top: 1px solid #344b56; }
 .tool-path > div { display: flex; align-items: center; gap: 22px; padding: 24px 0; border-bottom: 1px solid #344b56; }.tool-path > div > span { font: 12px ui-monospace, Consolas, monospace; color: var(--accent); }.tool-path > div > span:last-child { margin-left: auto; font-size: 18px; }.tool-path strong { display: block; font-size: 16px; font-weight: 500; }.tool-path small { display: block; color: var(--muted); margin-top: 5px; font-size: 12px; }
 .home-contact { display: flex; justify-content: space-between; gap: 32px; align-items: center; padding: 56px 0 72px; border-top: 1px solid var(--border); }.home-contact p:not(.eyebrow) { margin-top: 20px; color: var(--muted); font-size: 14px; }.home-contact-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+/* Embedded development: extends the approved dark visual system. */
+.embedded-services { margin-top: 56px; padding-top: 48px; border-top: 1px solid var(--border); scroll-margin-top: 110px; }
+.embedded-card { display: flex; flex-direction: column; min-width: 0; overflow: hidden; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); scroll-margin-top: 110px; }
+.embedded-card > img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; border-bottom: 1px solid var(--border); }
+.embedded-card-body { display: flex; flex-direction: column; flex: 1; padding: 26px; }
+.embedded-card .step-number { margin-bottom: 16px; }
+.embedded-card h3 { font-size: 20px; font-weight: 600; line-height: 1.5; margin-bottom: 14px; }
+.embedded-card p, .embedded-card ul { color: var(--muted); font-size: 14px; line-height: 1.9; }
+.embedded-card ul { list-style: disc; padding-left: 18px; margin: 20px 0 24px; }
+.embedded-card li + li { margin-top: 7px; }
+.embedded-card li::marker { color: var(--accent); }
+.embedded-card .text-link { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border); }
+.embedded-note { margin-top: 18px; color: var(--subtle); font-size: 12px; line-height: 1.9; }
+.embedded-handoff { display: flex; align-items: center; justify-content: space-between; gap: 28px; margin: 28px 0; padding: 28px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
+.embedded-handoff h3 { font-size: 19px; font-weight: 600; margin-bottom: 10px; }
+.embedded-handoff p { color: var(--muted); font-size: 14px; max-width: 680px; }
+.embedded-handoff .secondary-button { flex-shrink: 0; }
+.embedded-teaser { display: grid; grid-template-columns: 240px minmax(0, 1fr); align-items: center; gap: 28px; margin-top: 22px; padding-right: 28px; overflow: hidden; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); transition: border-color .18s; }
+.embedded-teaser:hover { border-color: #57837e; }
+.embedded-teaser > img { display: block; width: 100%; height: 100%; min-height: 180px; object-fit: cover; }
+.embedded-teaser h3 { font-size: 21px; font-weight: 550; margin: 10px 0; }
+.embedded-teaser p:not(.eyebrow) { color: var(--muted); font-size: 14px; line-height: 1.9; }
+.embedded-teaser > div { padding-block: 24px; }.embedded-teaser .text-link { display: inline-flex; margin-top: 16px; }
+@media (min-width: 768px) and (max-width: 1100px) {
+    .embedded-card-body { padding: 20px; }.embedded-card h3 { font-size: 18px; }
+    .embedded-teaser { grid-template-columns: 200px minmax(0, 1fr); gap: 22px; }
+}
+@media (max-width: 767px) {
+    .embedded-services { margin-top: 36px; padding-top: 32px; }.embedded-card-body { padding: 24px; }
+    .embedded-handoff { flex-direction: column; align-items: flex-start; padding: 24px; gap: 20px; }
+    .embedded-teaser { grid-template-columns: 1fr; gap: 0; padding: 0; }.embedded-teaser > img { height: auto; min-height: 0; aspect-ratio: 3 / 2; }.embedded-teaser > div { padding: 24px; }
+}
 /* Hermes contact UI */
 .support-launcher { position: fixed; right: 26px; bottom: 26px; display: flex; align-items: center; gap: 10px; z-index: 40; background: var(--accent); color: var(--accent-dark); border: 1px solid #83e4d9; padding: 12px 18px; border-radius: 28px; box-shadow: 0 6px 22px #0004; font-weight: 600; font-size: 13px; }.support-launcher:hover { background: #86e5d9; }
 .support-layout { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(280px, 1fr); gap: 26px; align-items: start; }
